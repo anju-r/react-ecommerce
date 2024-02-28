@@ -7,6 +7,19 @@ function classNames(...classes) {
 }
 
 export default function ProductFilters({ filterOptions, setFilterOptions, sortOptions, setSortOptions }) {
+  function onFilterChange(selectedSortName) {
+    const newSortOptions = sortOptions.map(option => {
+      return {
+        name: option.name,
+        propertyName: option.propertyName,
+        current: option.name === selectedSortName ? true : false
+      }
+    })
+
+    setSortOptions(newSortOptions);
+
+  }
+
   return (
     <Disclosure
       as="section"
@@ -109,7 +122,7 @@ export default function ProductFilters({ filterOptions, setFilterOptions, sortOp
                       {({ active }) => (
                         <button
                           onClick={() => {
-                            // TODO
+                            onFilterChange(option.name)
                           }}
                           className={classNames(
                             option.current ? "font-medium text-gray-900" : "text-gray-500",

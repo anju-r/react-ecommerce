@@ -22,8 +22,8 @@ const getDefaultFilterOptions = () => {
 
 const getDefaultSortOptions = () => {
   return [
-    { name: "Price", current: false },
-    { name: "Newest", current: false },
+    { name: "Price", propertyName: 'price', current: false },
+    { name: "Newest", propertyName: 'releaseDate', current: false },
   ];
 };
 
@@ -40,8 +40,34 @@ export default function ProductTable({ cart, updateCart }) {
       let body = await res.json();
       setProducts(body);
     };
-    fetchProducts();
-  });
+    if (products.length < 1) {
+      fetchProducts();
+    }
+
+    // Sort based on selected sort
+    // sortOptions.current
+    // products.sort((a, b) => a.sortOptions.name - b.sortOptions.name)
+
+
+    for (let i = 0; i < sortOptions.length; i++) {
+      if (sortOptions[i].current === true) {
+        console.log(sortOptions[i].name)
+        const newProducts = [...products]
+
+        newProducts.sort((a, b) => a[sortOptions[i].propertyName] - b[sortOptions[i].propertyName]);
+        setProducts(newProducts)
+        // if (sortOptions[i].name === "Price") {
+        //   newProducts.sort((a, b) => a.price - b.price);
+        //   setProducts(newProducts)
+        // }
+        // else if (sortOptions[i].name === "Newest") {
+        //   newProducts.sort((a, b) => a.releaseDate - b.releaseDate)
+        //   setProducts(newProducts)
+        // }
+      }
+    }
+
+  }, [sortOptions]);
 
   return (
     <div className="bg-white">
